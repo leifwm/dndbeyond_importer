@@ -3,12 +3,12 @@
 const puppeteer = require('puppeteer');
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: false });
+  const browser = await puppeteer.launch({ headless: true });
   await console.log('Launching test');
 
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 800 })
-  await page.goto('https://www.dndbeyond.com/characters/33025149/xRU80d');
+  await page.goto('https://www.dndbeyond.com/characters/34924358/QlCriX');
   await console.log('User navigated to site');
   await page.waitForTimeout(5000)
 
@@ -79,6 +79,7 @@ const savAdvdirty = await page.evaluate(() =>
    (element, index) => element.textContent,
   )
 )
+
 const savAdv = savAdvdirty.filter(element => element != '' )
 
 const charSen = await page.evaluate(() =>
@@ -108,6 +109,7 @@ const charSkill = await page.evaluate(() =>
    (element, index) => element.textContent,
   )
 )
+
 const charSkillcleaner = charSkill.shift();
 
 const charInit = await page.evaluate(() =>
@@ -117,14 +119,12 @@ const charInit = await page.evaluate(() =>
   )
 )
 
-
 const charAc = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ddbc-armor-class-box__value'),
    (element, index) => element.textContent,
   )
 )
-
 
 const charDefdirty = await page.evaluate(() =>
     Array.from(
@@ -162,7 +162,7 @@ const attackRange = await page.evaluate(() =>
 )
 const attackBonus = await page.evaluate(() =>
   Array.from(
-   document.querySelectorAll('.ddbc-combat-attack__tohit'),
+   document.querySelectorAll('.ddbc-combat-attack__action'),
    (element, index) => element.textContent,
   )
 )
@@ -246,12 +246,13 @@ const attackType = await page.evaluate(() =>
  )
 
  // Spell Section --------------------------
+var castInfo = undefined
 if (await page.$('.ct-primary-box > .ddbc-tab-list > .ddbc-tab-list__nav > .ct-primary-box__tab--spells > .ddbc-tab-list__nav-item-label') !== null)
 {
 
 await page.click('.ct-primary-box > .ddbc-tab-list > .ddbc-tab-list__nav > .ct-primary-box__tab--spells > .ddbc-tab-list__nav-item-label')
 
- const castInfo = await page.evaluate(() =>
+ var castInfo = await page.evaluate(() =>
    Array.from(
     document.querySelectorAll('.ct-spells-level-casting__info-items'),
     (element, index) => element.textContent,
@@ -272,37 +273,45 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
  if (linkNavSelector != ('Concentration' || 'Ritual') )
  {
      await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(2) > .ddbc-tab-options__header-heading')
-     const spellsNamePone = await page.evaluate(() =>
+     var spellsNamePone = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ddbc-spell-name'),
         (element, index) => element.textContent,
        )
      )
-     const spellsTimePone = await page.evaluate(() =>
+     var spellsTimePone = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__activation'),
         (element, index) => element.textContent,
        )
      )
-     const spellsRangePone = await page.evaluate(() =>
+     var spellsRangePone = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__range'),
         (element, index) => element.textContent,
        )
      )
-     const spellsHitPone = await page.evaluate(() =>
+     var spellsHitPone = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__attacking'),
         (element, index) => element.textContent,
        )
      )
-     const spellsDmgPone = await page.evaluate(() =>
+     var spellsDmgPone = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__damage'),
         (element, index) => element.textContent,
        )
      )
+     var lvlPone = await page.evaluate(() =>
+       Array.from(
+        document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(2) > .ddbc-tab-options__header-heading'),
+        (element, index) => element.textContent,
+       )
+     )
+
      //console.log(spellsNamePone)
+     //console.log(lvlPone)
      /*console.log(spellsTimePone)
      console.log(spellsRangePone)
      console.log(spellsHitPone)
@@ -327,33 +336,39 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
  if (linkNavSelector != ('Concentration' || 'Ritual') )
  {
      await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(3) > .ddbc-tab-options__header-heading')
-     const spellsNamePtwo = await page.evaluate(() =>
+     var spellsNamePtwo = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ddbc-spell-name'),
         (element, index) => element.textContent,
        )
      )
-     const spellsTimePtwo = await page.evaluate(() =>
+     var spellsTimePtwo = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__activation'),
         (element, index) => element.textContent,
        )
      )
-     const spellsRangePtwo = await page.evaluate(() =>
+     var spellsRangePtwo = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__range'),
         (element, index) => element.textContent,
        )
      )
-     const spellsHitPtwo = await page.evaluate(() =>
+     var spellsHitPtwo = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__attacking'),
         (element, index) => element.textContent,
        )
      )
-     const spellsDmgPtwo = await page.evaluate(() =>
+     var spellsDmgPtwo = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__damage'),
+        (element, index) => element.textContent,
+       )
+     )
+     var lvlPtwo = await page.evaluate(() =>
+       Array.from(
+        document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(3) > .ddbc-tab-options__header-heading'),
         (element, index) => element.textContent,
        )
      )
@@ -380,33 +395,39 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
  if (linkNavSelector != ('Concentration' || 'Ritual') )
  {
      await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(4) > .ddbc-tab-options__header-heading')
-     const spellsNamePthree = await page.evaluate(() =>
+     var spellsNamePthree = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ddbc-spell-name'),
         (element, index) => element.textContent,
        )
      )
-     const spellsTimePthree = await page.evaluate(() =>
+     var spellsTimePthree = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__activation'),
         (element, index) => element.textContent,
        )
      )
-     const spellsRangePthree = await page.evaluate(() =>
+     var spellsRangePthree = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__range'),
         (element, index) => element.textContent,
        )
      )
-     const spellsHitPthree = await page.evaluate(() =>
+     var spellsHitPthree = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__attacking'),
         (element, index) => element.textContent,
        )
      )
-     const spellsDmgPthree = await page.evaluate(() =>
+     var spellsDmgPthree = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__damage'),
+        (element, index) => element.textContent,
+       )
+     )
+     var lvlPthree = await page.evaluate(() =>
+       Array.from(
+        document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(4) > .ddbc-tab-options__header-heading'),
         (element, index) => element.textContent,
        )
      )
@@ -433,33 +454,39 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
  if (linkNavSelector != ('Concentration' || 'Ritual') )
  {
      await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(5) > .ddbc-tab-options__header-heading')
-     const spellsNamePfour = await page.evaluate(() =>
+     var spellsNamePfour = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ddbc-spell-name'),
         (element, index) => element.textContent,
        )
      )
-     const spellsTimePfour = await page.evaluate(() =>
+     var spellsTimePfour = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__activation'),
         (element, index) => element.textContent,
        )
      )
-     const spellsRangePfour = await page.evaluate(() =>
+     var spellsRangePfour = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__range'),
         (element, index) => element.textContent,
        )
      )
-     const spellsHitPfour = await page.evaluate(() =>
+     var spellsHitPfour = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__attacking'),
         (element, index) => element.textContent,
        )
      )
-     const spellsDmgPfour = await page.evaluate(() =>
+     var spellsDmgPfour = await page.evaluate(() =>
        Array.from(
         document.querySelectorAll('.ct-spells-spell__damage'),
+        (element, index) => element.textContent,
+       )
+     )
+     var lvlPfour = await page.evaluate(() =>
+       Array.from(
+        document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(5) > .ddbc-tab-options__header-heading'),
         (element, index) => element.textContent,
        )
      )
@@ -487,33 +514,39 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
   if (linkNavSelector != ('Concentration' || 'Ritual') )
   {
       await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(6) > .ddbc-tab-options__header-heading')
-      const spellsNamePfive = await page.evaluate(() =>
+      var spellsNamePfive = await page.evaluate(() =>
         Array.from(
          document.querySelectorAll('.ddbc-spell-name'),
          (element, index) => element.textContent,
         )
       )
-      const spellsTimePfive = await page.evaluate(() =>
+      var spellsTimePfive = await page.evaluate(() =>
         Array.from(
          document.querySelectorAll('.ct-spells-spell__activation'),
          (element, index) => element.textContent,
         )
       )
-      const spellsRangePfive = await page.evaluate(() =>
+      var spellsRangePfive = await page.evaluate(() =>
         Array.from(
          document.querySelectorAll('.ct-spells-spell__range'),
          (element, index) => element.textContent,
         )
       )
-      const spellsHitPfive = await page.evaluate(() =>
+      var spellsHitPfive = await page.evaluate(() =>
         Array.from(
          document.querySelectorAll('.ct-spells-spell__attacking'),
          (element, index) => element.textContent,
         )
       )
-      const spellsDmgPfive = await page.evaluate(() =>
+      var spellsDmgPfive = await page.evaluate(() =>
         Array.from(
          document.querySelectorAll('.ct-spells-spell__damage'),
+         (element, index) => element.textContent,
+        )
+      )
+      var lvlPfive = await page.evaluate(() =>
+        Array.from(
+         document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(6) > .ddbc-tab-options__header-heading'),
          (element, index) => element.textContent,
         )
       )
@@ -540,33 +573,39 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
    if (linkNavSelector != ('Concentration' || 'Ritual') )
    {
        await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(7) > .ddbc-tab-options__header-heading')
-       const spellsNamePsix = await page.evaluate(() =>
+       var spellsNamePsix = await page.evaluate(() =>
          Array.from(
           document.querySelectorAll('.ddbc-spell-name'),
           (element, index) => element.textContent,
          )
        )
-       const spellsTimePsix = await page.evaluate(() =>
+       var spellsTimePsix = await page.evaluate(() =>
          Array.from(
           document.querySelectorAll('.ct-spells-spell__activation'),
           (element, index) => element.textContent,
          )
        )
-       const spellsRangePsix = await page.evaluate(() =>
+       var spellsRangePsix = await page.evaluate(() =>
          Array.from(
           document.querySelectorAll('.ct-spells-spell__range'),
           (element, index) => element.textContent,
          )
        )
-       const spellsHitPsix = await page.evaluate(() =>
+       var spellsHitPsix = await page.evaluate(() =>
          Array.from(
           document.querySelectorAll('.ct-spells-spell__attacking'),
           (element, index) => element.textContent,
          )
        )
-       const spellsDmgPsix = await page.evaluate(() =>
+       var spellsDmgPsix = await page.evaluate(() =>
          Array.from(
           document.querySelectorAll('.ct-spells-spell__damage'),
+          (element, index) => element.textContent,
+         )
+       )
+       var lvlPsix = await page.evaluate(() =>
+         Array.from(
+          document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(7) > .ddbc-tab-options__header-heading'),
           (element, index) => element.textContent,
          )
        )
@@ -593,33 +632,39 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
     if (linkNavSelector != ('Concentration' || 'Ritual') )
     {
         await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(8) > .ddbc-tab-options__header-heading')
-        const spellsNamePseven = await page.evaluate(() =>
+        var spellsNamePseven = await page.evaluate(() =>
           Array.from(
            document.querySelectorAll('.ddbc-spell-name'),
            (element, index) => element.textContent,
           )
         )
-        const spellsTimePseven = await page.evaluate(() =>
+        var spellsTimePseven = await page.evaluate(() =>
           Array.from(
            document.querySelectorAll('.ct-spells-spell__activation'),
            (element, index) => element.textContent,
           )
         )
-        const spellsRangePseven = await page.evaluate(() =>
+        var spellsRangePseven = await page.evaluate(() =>
           Array.from(
            document.querySelectorAll('.ct-spells-spell__range'),
            (element, index) => element.textContent,
           )
         )
-        const spellsHitPseven = await page.evaluate(() =>
+        var spellsHitPseven = await page.evaluate(() =>
           Array.from(
            document.querySelectorAll('.ct-spells-spell__attacking'),
            (element, index) => element.textContent,
           )
         )
-        const spellsDmgPseven = await page.evaluate(() =>
+        var spellsDmgPseven = await page.evaluate(() =>
           Array.from(
            document.querySelectorAll('.ct-spells-spell__damage'),
+           (element, index) => element.textContent,
+          )
+        )
+        var lvlPseven = await page.evaluate(() =>
+          Array.from(
+           document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(8) > .ddbc-tab-options__header-heading'),
            (element, index) => element.textContent,
           )
         )
@@ -646,33 +691,39 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
      if (linkNavSelector != ('Concentration' || 'Ritual') )
      {
          await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(9) > .ddbc-tab-options__header-heading')
-         const spellsNamePeight = await page.evaluate(() =>
+         var spellsNamePeight = await page.evaluate(() =>
            Array.from(
             document.querySelectorAll('.ddbc-spell-name'),
             (element, index) => element.textContent,
            )
          )
-         const spellsTimePeight = await page.evaluate(() =>
+         var spellsTimePeight = await page.evaluate(() =>
            Array.from(
             document.querySelectorAll('.ct-spells-spell__activation'),
             (element, index) => element.textContent,
            )
          )
-         const spellsRangePeight = await page.evaluate(() =>
+         var spellsRangePeight = await page.evaluate(() =>
            Array.from(
             document.querySelectorAll('.ct-spells-spell__range'),
             (element, index) => element.textContent,
            )
          )
-         const spellsHitPeight = await page.evaluate(() =>
+         var spellsHitPeight = await page.evaluate(() =>
            Array.from(
             document.querySelectorAll('.ct-spells-spell__attacking'),
             (element, index) => element.textContent,
            )
          )
-         const spellsDmgPeight = await page.evaluate(() =>
+         var spellsDmgPeight = await page.evaluate(() =>
            Array.from(
             document.querySelectorAll('.ct-spells-spell__damage'),
+            (element, index) => element.textContent,
+           )
+         )
+         var lvlPeight = await page.evaluate(() =>
+           Array.from(
+            document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(9) > .ddbc-tab-options__header-heading'),
             (element, index) => element.textContent,
            )
          )
@@ -699,33 +750,39 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
       if (linkNavSelector != ('Concentration' || 'Ritual') )
       {
           await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(10) > .ddbc-tab-options__header-heading')
-          const spellsNamePnine = await page.evaluate(() =>
+          var spellsNamePnine = await page.evaluate(() =>
             Array.from(
              document.querySelectorAll('.ddbc-spell-name'),
              (element, index) => element.textContent,
             )
           )
-          const spellsTimePnine = await page.evaluate(() =>
+          var spellsTimePnine = await page.evaluate(() =>
             Array.from(
              document.querySelectorAll('.ct-spells-spell__activation'),
              (element, index) => element.textContent,
             )
           )
-          const spellsRangePnine = await page.evaluate(() =>
+          var spellsRangePnine = await page.evaluate(() =>
             Array.from(
              document.querySelectorAll('.ct-spells-spell__range'),
              (element, index) => element.textContent,
             )
           )
-          const spellsHitPnine = await page.evaluate(() =>
+          var spellsHitPnine = await page.evaluate(() =>
             Array.from(
              document.querySelectorAll('.ct-spells-spell__attacking'),
              (element, index) => element.textContent,
             )
           )
-          const spellsDmgPnine = await page.evaluate(() =>
+          var spellsDmgPnine = await page.evaluate(() =>
             Array.from(
              document.querySelectorAll('.ct-spells-spell__damage'),
+             (element, index) => element.textContent,
+            )
+          )
+          var lvlPnine = await page.evaluate(() =>
+            Array.from(
+             document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(10) > .ddbc-tab-options__header-heading'),
              (element, index) => element.textContent,
             )
           )
@@ -752,33 +809,39 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
        if (linkNavSelector != ('Concentration' || 'Ritual') )
        {
            await page.click('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(11) > .ddbc-tab-options__header-heading')
-           const spellsNamePten = await page.evaluate(() =>
+           var spellsNamePten = await page.evaluate(() =>
              Array.from(
               document.querySelectorAll('.ddbc-spell-name'),
               (element, index) => element.textContent,
              )
            )
-           const spellsTimePten = await page.evaluate(() =>
+           var spellsTimePten = await page.evaluate(() =>
              Array.from(
               document.querySelectorAll('.ct-spells-spell__activation'),
               (element, index) => element.textContent,
              )
            )
-           const spellsRangePten = await page.evaluate(() =>
+           var spellsRangePten = await page.evaluate(() =>
              Array.from(
               document.querySelectorAll('.ct-spells-spell__range'),
               (element, index) => element.textContent,
              )
            )
-           const spellsHitPten = await page.evaluate(() =>
+           var spellsHitPten = await page.evaluate(() =>
              Array.from(
               document.querySelectorAll('.ct-spells-spell__attacking'),
               (element, index) => element.textContent,
              )
            )
-           const spellsDmgPten = await page.evaluate(() =>
+           var spellsDmgPten = await page.evaluate(() =>
              Array.from(
               document.querySelectorAll('.ct-spells-spell__damage'),
+              (element, index) => element.textContent,
+             )
+           )
+           var lvlPten = await page.evaluate(() =>
+             Array.from(
+              document.querySelectorAll('.ct-spells__content > .ddbc-tab-options > .ddbc-tab-options__nav > .ct-spells__tab-level:nth-child(11) > .ddbc-tab-options__header-heading'),
               (element, index) => element.textContent,
              )
            )
@@ -845,46 +908,513 @@ const featDescription = await page.evaluate(() =>
   )
 )
 
+browser.close();
+console.log('Browser closed');
+
 /*console.log(featTitle)
 console.log(featDescription)
 console.log(featTitle.length)
 console.log(featDescription.length)*/
 
 
- console.log((JSON.stringify(charName.concat(charRace, charClass))))
- /*console.log('Atributes', (JSON.stringify(charStats)))
+ /*console.log((JSON.stringify(charName.concat(charRace, charClass))))
+ console.log('Atributes', (JSON.stringify(charStats)))
  console.log('Modifiers',(JSON.stringify(charStatsMod)))
  console.log('Proficiency',(JSON.stringify(charBonus)))
  console.log('Speed', (JSON.stringify(charSpeed)))
  console.log('Hp', (JSON.stringify(charHp)))
  console.log('Saves', (JSON.stringify(charSav)))
- console.log('Advantage',(JSON.stringify(savAdv)))//Can affect index and final string length
  console.log('Senses', (JSON.stringify(charSen)))
  console.log('Vision', (JSON.stringify(charSenExtra)))
- console.log('Proficiencies', (JSON.stringify(charProf)))
  console.log('Skills', (JSON.stringify(charSkill)))
  console.log('Initiative', (JSON.stringify(charInit)))
  console.log('AC', (JSON.stringify(charAc)))
  console.log('Defenses', (JSON.stringify(charDef)))
- console.log('Attacks', (JSON.stringify(charAttack)))
- console.log(attackName)
- console.log(attackRange)
- console.log(attackBonus)
- console.log(attackDamage)
- console.log(attackNotes)
- console.log(attackType)
- console.log(actionTitle)
- console.log(actionDescription)
- console.log(bonusActionTitle)
- console.log(bonusActionDescription)
- console.log(bonusActionSpellsTitle)
- console.log(bonusActionSpellsDescription)
- console.log(reactionTitle)
- onsole.log(reactionDescription)
- //Spell console.log(castInfo)
- */
+ //Vaiable Length
+ console.log('Proficiencies', (JSON.stringify(charProf)))
+ console.log('Save Advantage',(JSON.stringify(savAdv)))
+ console.log('Attacks', (JSON.stringify(attackName)))
+ console.log('Attacks Range', (JSON.stringify(attackRange)))
+ console.log('Attacks Bonus', (JSON.stringify(attackBonus)))
+ console.log('Attacks Damage', (JSON.stringify(attackDamage)))
+ console.log('Attacks Notes', (JSON.stringify(attackNotes)))
+ console.log('Attacks Type', (JSON.stringify(attackType)))
+ console.log('Actions', (JSON.stringify(actionTitle)))
+ console.log('Actions Description', (JSON.stringify(actionDescription)))
+ console.log('Bonus Actions', (JSON.stringify(bonusActionTitle)))
+ console.log('Bonus Actions Description', (JSON.stringify(bonusActionDescription)))
+ console.log('Bonus Actions Spells', (JSON.stringify(bonusActionSpellsTitle)))
+ console.log('Bonus Actions Spells Description', (JSON.stringify(bonusActionSpellsDescription)))
+ console.log('Reactions', (JSON.stringify(reactionTitle)))
+ console.log('Reactions Description', (JSON.stringify(reactionDescription)))
+ //SpelLs
+if (castInfo != undefined)
+{
+ console.log('Caster', (JSON.stringify(castInfo)))
+ console.log('Spells Names', (JSON.stringify(spellsNamePone.concat(spellsNamePtwo, spellsNamePthree, spellsNamePfour, spellsNamePfive, spellsNamePsix, spellsNamePseven, spellsNamePeight, spellsNamePnine, spellsNamePten,))))
+ console.log('Spells Times', (JSON.stringify(spellsTimePone.concat(spellsTimePtwo, spellsTimePthree, spellsTimePfour, spellsTimePfive, spellsTimePsix, spellsTimePseven, spellsTimePeight, spellsTimePnine, spellsTimePten,))))
+ console.log('Spells Ranges', (JSON.stringify(spellsRangePone.concat(spellsRangePtwo, spellsRangePthree, spellsRangePfour, spellsRangePfive, spellsRangePsix, spellsRangePseven, spellsRangePeight, spellsRangePnine, spellsRangePten,))))
+ console.log('Spells To Hit', (JSON.stringify(spellsHitPone.concat(spellsHitPtwo, spellsHitPthree, spellsHitPfour, spellsHitPfive, spellsHitPsix, spellsHitPseven, spellsHitPeight, spellsHitPnine, spellsHitPten,))))
+ console.log('Spells Damage', (JSON.stringify(spellsDmgPone.concat(spellsDmgPtwo, spellsDmgPthree, spellsDmgPfour, spellsDmgPfive, spellsDmgPsix, spellsDmgPseven, spellsDmgPeight, spellsDmgPnine, spellsDmgPten,))))
+}
+else {console.log('Not a Caster')}
+//Inventory
+console.log('Items', (JSON.stringify(invName)))
+console.log('Items Weight', (JSON.stringify(invWeight)))
+console.log('Items Quantity', (JSON.stringify(invQuantity)))
+console.log('Items Cost', (JSON.stringify(invCost)))
+//Features
+console.log('Features', (JSON.stringify(featTitle)))
+console.log('Features Description', (JSON.stringify(featDescription)))
 
- browser.close();
- console.log('Browser closed');
+*/
+
+
+
+var ficha = {
+         name: charName[0],
+         race: charRace[0],
+         clas: charClass[0],
+
+         strAtr: charStats[0],
+         dexAtr: charStats[1],
+         conAtr: charStats[2],
+         intAtr: charStats[3],
+         wisAtr: charStats[4],
+         chaAtr: charStats[5],
+
+         strhMod: charStatsMod[0],
+         dexMod: charStatsMod[1],
+         conMod: charStatsMod[2],
+         intMod: charStatsMod[3],
+         wisMod: charStatsMod[4],
+         chaMod: charStatsMod[5],
+
+         proficiency: charBonus,
+         speed: charSpeed,
+         currentHp: charHp[0],
+         maxHp: charHp[1],
+
+         strSav: charSav[0],
+         dexSav: charSav[1],
+         conSav: charSav[2],
+         intSav: charSav[3],
+         wisSav: charSav[4],
+         chaSav: charSav[5],
+
+         passPerc: charSen[0],
+         passInve: charSen[1],
+         passInsi: charSen[2],
+         extraSenses: charSenExtra[0],
+
+         acrobatics: charSkill[0],
+         handling: charSkill[1],
+         arcana: charSkill[2],
+         athletics: charSkill[3],
+         deception: charSkill[4],
+         history: charSkill[5],
+         insight: charSkill[6],
+         intimidation: charSkill[7],
+         investigation: charSkill[8],
+         medicine: charSkill[9],
+         nature: charSkill[10],
+         perception: charSkill[11],
+         performance: charSkill[12],
+         persuasion: charSkill[13],
+         religion: charSkill[14],
+         hand: charSkill[15],
+         stealh: charSkill[16],
+         survival: charSkill[17],
+
+         initiative: charInit[0],
+         armorClass: charAc[0],
+
+ }
+
+ // Attacks
+var numberOfAttacks = attackName.length;
+var i;
+
+for (i = 0; i < numberOfAttacks; i++){
+ficha['attack' + i] = attackName[i]
+}
+for (i = 0; i < numberOfAttacks; i++){
+ficha['attackRange' + i] = attackRange[i]
+}
+for (i = 0; i < numberOfAttacks; i++){
+ficha['attackBonus' + i] = attackBonus[i]
+}
+for (i = 0; i < numberOfAttacks; i++){
+ficha['attackDamage' + i] = attackDamage[i]
+}
+for (i = 0; i < numberOfAttacks; i++){
+ficha['attackNotes' + i] = attackNotes[i]
+}
+for (i = 0; i < numberOfAttacks; i++){
+ficha['attackType' + i] = attackType[i]
+}
+
+//Actions
+
+var numberOfActions = actionTitle.length;
+
+for (i = 0; i < numberOfActions; i++){
+ficha['action' + i] = actionTitle[i]
+}
+for (i = 0; i < numberOfActions; i++){
+ficha['actionDescription' + i] = actionDescription[i]
+}
+
+//Bonus Action
+
+var numberOfBonusActions = bonusActionTitle.length;
+
+for (i = 0; i < numberOfBonusActions; i++){
+ficha['bAction' + i] = bonusActionTitle[i]
+}
+for (i = 0; i < numberOfBonusActions; i++){
+ficha['bActionDescription' + i] = bonusActionDescription[i]
+}
+
+var numberOfBonusActionsS = bonusActionSpellsTitle.length;
+
+for (i = 0; i < numberOfBonusActionsS; i++){
+ficha['bActionSpell' + i] = bonusActionSpellsTitle[i]
+}
+for (i = 0; i < numberOfBonusActionsS; i++){
+ficha['bActionDescriptionSpell' + i] = bonusActionSpellsDescription[i]
+}
+
+//Reactions
+
+var numberOfreActions = reactionTitle.length;
+
+for (i = 0; i < numberOfreActions; i++){
+ficha['action' + i] = reactionTitle[i]
+}
+for (i = 0; i < numberOfreActions; i++){
+ficha['actionDescription' + i] = reactionDescription[i]
+}
+
+//Inventory
+
+var numberOfItems = invName.length;
+
+for (i = 0; i < numberOfItems; i++){
+ficha['item' + i] = invName[i]
+}
+for (i = 0; i < numberOfItems; i++){
+ficha['itemWeight' + i] = invWeight[i]
+}
+for (i = 0; i < numberOfItems; i++){
+ficha['itemQuantity' + i] = invQuantity[i]
+}
+for (i = 0; i < numberOfItems; i++){
+ficha['itemCost' + i] = invCost[i]
+}
+
+//features
+
+var numberOfFeats = featTitle.length;
+
+for (i = 0; i < numberOfFeats; i++){
+ficha['Feature' + i] = featTitle[i]
+}
+for (i = 0; i < numberOfFeats; i++){
+ficha['FeatureDescription' + i] = featDescription[i]
+}
+
+//SpelLs
+
+if (castInfo != null)
+{
+ficha['spellMod'] = castInfo[0]
+ficha['spellAtc'] = castInfo[1]
+ficha['spellSave'] = castInfo[2]
+};
+
+//filter One
+if (lvlPone != undefined) {
+
+    var labelPone = lvlPone[0]
+
+    if (labelPone == '- 0 -') {var labelPone = 0}
+
+    ficha['labelPone'] = labelPone
+
+    var nPoneSpells = spellsNamePone.length;
+
+    for (i = 0; i < nPoneSpells; i++){
+    ficha[labelPone + 'Spell' + i] = spellsNamePone[i]
+    }
+    for (i = 0; i < nPoneSpells; i++){
+    ficha[labelPone + 'Spell' + i + 'Time' ] = spellsTimePone[i]
+    }
+    for (i = 0; i < nPoneSpells; i++){
+    ficha[labelPone + 'Spell' + i + 'Range' ] = spellsRangePone[i]
+    }
+    for (i = 0; i < nPoneSpells; i++){
+    ficha[labelPone + 'Spell' + i + 'Hit' ] = spellsHitPone[i]
+    }
+    for (i = 0; i < nPoneSpells; i++){
+    ficha[labelPone + 'Spell' + i + 'Dmg' ] = spellsDmgPone[i]
+    }
+}
+
+//Filter Two
+
+if (lvlPtwo != undefined) {
+
+    var labelPtwo = lvlPtwo[0]
+
+    ficha['labelPtwo'] = labelPtwo
+
+    var nPtwoSpells = spellsNamePtwo.length;
+
+    for (i = 0; i < nPtwoSpells; i++){
+    ficha[labelPtwo + 'Spell' + i] = spellsNamePtwo[i]
+    }
+    for (i = 0; i < nPtwoSpells; i++){
+    ficha[labelPtwo + 'Spell' + i + 'Time' ] = spellsTimePtwo[i]
+    }
+    for (i = 0; i < nPtwoSpells; i++){
+    ficha[labelPtwo + 'Spell' + i + 'Range' ] = spellsRangePtwo[i]
+    }
+    for (i = 0; i < nPtwoSpells; i++){
+    ficha[labelPtwo + 'Spell' + i + 'Hit' ] = spellsHitPtwo[i]
+    }
+    for (i = 0; i < nPtwoSpells; i++){
+    ficha[labelPtwo + 'Spell' + i + 'Dmg' ] = spellsDmgPtwo[i]
+    }
+}
+
+//Filter Three
+
+if (lvlPthree != undefined) {
+
+    var labelPthree = lvlPthree[0]
+
+    ficha['labelPthree'] = labelPthree
+
+    var nPthreeSpells = spellsNamePthree.length;
+
+    for (i = 0; i < nPthreeSpells; i++){
+    ficha[labelPthree + 'Spell' + i] = spellsNamePthree[i]
+    }
+    for (i = 0; i < nPthreeSpells; i++){
+    ficha[labelPthree + 'Spell' + i + 'Time' ] = spellsTimePthree[i]
+    }
+    for (i = 0; i < nPthreeSpells; i++){
+    ficha[labelPthree + 'Spell' + i + 'Range' ] = spellsRangePthree[i]
+    }
+    for (i = 0; i < nPthreeSpells; i++){
+    ficha[labelPthree + 'Spell' + i + 'Hit' ] = spellsHitPthree[i]
+    }
+    for (i = 0; i < nPthreeSpells; i++){
+    ficha[labelPthree + 'Spell' + i + 'Dmg' ] = spellsDmgPthree[i]
+    }
+}
+
+//Filter Four
+
+if (lvlPfour != undefined) {
+
+    var labelPfour = lvlPfour[0]
+
+    ficha['labelPfour'] = labelPfour
+
+    var nPfourSpells = spellsNamePfour.length;
+
+    for (i = 0; i < nPfourSpells; i++){
+    ficha[labelPfour + 'Spell' + i] = spellsNamePfour[i]
+    }
+    for (i = 0; i < nPfourSpells; i++){
+    ficha[labelPfour + 'Spell' + i + 'Time' ] = spellsTimePfour[i]
+    }
+    for (i = 0; i < nPfourSpells; i++){
+    ficha[labelPfour + 'Spell' + i + 'Range' ] = spellsRangePfour[i]
+    }
+    for (i = 0; i < nPfourSpells; i++){
+    ficha[labelPfour + 'Spell' + i + 'Hit' ] = spellsHitPfour[i]
+    }
+    for (i = 0; i < nPfourSpells; i++){
+    ficha[labelPfour + 'Spell' + i + 'Dmg' ] = spellsDmgPfour[i]
+    }
+}
+
+//Filter Five
+
+if (lvlPfive != undefined) {
+
+    var labelPfive = lvlPfive[0]
+
+    ficha['labelPfive'] = labelPfive
+
+    var nPfiveSpells = spellsNamePfive.length;
+
+    for (i = 0; i < nPfiveSpells; i++){
+    ficha[labelPfive + 'Spell' + i] = spellsNamePfive[i]
+    }
+    for (i = 0; i < nPfiveSpells; i++){
+    ficha[labelPfive + 'Spell' + i + 'Time' ] = spellsTimePfive[i]
+    }
+    for (i = 0; i < nPfiveSpells; i++){
+    ficha[labelPfive + 'Spell' + i + 'Range' ] = spellsRangePfive[i]
+    }
+    for (i = 0; i < nPfiveSpells; i++){
+    ficha[labelPfive + 'Spell' + i + 'Hit' ] = spellsHitPfive[i]
+    }
+    for (i = 0; i < nPfiveSpells; i++){
+    ficha[labelPfive + 'Spell' + i + 'Dmg' ] = spellsDmgPfive[i]
+    }
+}
+
+//Filter Six
+
+if (lvlPsix != undefined) {
+
+    var labelPsix = lvlPsix[0]
+
+    ficha['labelPsix'] = labelPsix
+
+    var nPsixSpells = spellsNamePsix.length;
+
+    for (i = 0; i < nPsixSpells; i++){
+    ficha[labelPsix + 'Spell' + i] = spellsNamePsix[i]
+    }
+    for (i = 0; i < nPsixSpells; i++){
+    ficha[labelPsix + 'Spell' + i + 'Time' ] = spellsTimePsix[i]
+    }
+    for (i = 0; i < nPsixSpells; i++){
+    ficha[labelPsix + 'Spell' + i + 'Range' ] = spellsRangePsix[i]
+    }
+    for (i = 0; i < nPsixSpells; i++){
+    ficha[labelPsix + 'Spell' + i + 'Hit' ] = spellsHitPsix[i]
+    }
+    for (i = 0; i < nPsixSpells; i++){
+    ficha[labelPsix + 'Spell' + i + 'Dmg' ] = spellsDmgPsix[i]
+    }
+}
+
+
+//Filter Seven
+
+if (lvlPseven != undefined) {
+
+    var labelPseven = lvlPseven[0]
+
+    ficha['labelPseven'] = labelPseven
+
+    var nPsevenSpells = spellsNamePseven.length;
+
+    for (i = 0; i < nPsevenSpells; i++){
+    ficha[labelPseven + 'Spell' + i] = spellsNamePseven[i]
+    }
+    for (i = 0; i < nPsevenSpells; i++){
+    ficha[labelPseven + 'Spell' + i + 'Time' ] = spellsTimePseven[i]
+    }
+    for (i = 0; i < nPsevenSpells; i++){
+    ficha[labelPseven + 'Spell' + i + 'Range' ] = spellsRangePseven[i]
+    }
+    for (i = 0; i < nPsevenSpells; i++){
+    ficha[labelPseven + 'Spell' + i + 'Hit' ] = spellsHitPseven[i]
+    }
+    for (i = 0; i < nPsevenSpells; i++){
+    ficha[labelPseven + 'Spell' + i + 'Dmg' ] = spellsDmgPseven[i]
+    }
+}
+
+//Filter Eight
+
+if (lvlPeight != undefined) {
+
+    var labelPeight = lvlPeight[0]
+
+    ficha['labelPeight'] = labelPeight
+
+    var nPeightSpells = spellsNamePeight.length;
+
+    for (i = 0; i < nPeightSpells; i++){
+    ficha[labelPeight + 'Spell' + i] = spellsNamePeight[i]
+    }
+    for (i = 0; i < nPeightSpells; i++){
+    ficha[labelPeight + 'Spell' + i + 'Time' ] = spellsTimePeight[i]
+    }
+    for (i = 0; i < nPeightSpells; i++){
+    ficha[labelPeight + 'Spell' + i + 'Range' ] = spellsRangePeight[i]
+    }
+    for (i = 0; i < nPeightSpells; i++){
+    ficha[labelPeight + 'Spell' + i + 'Hit' ] = spellsHitPeight[i]
+    }
+    for (i = 0; i < nPeightSpells; i++){
+    ficha[labelPeight + 'Spell' + i + 'Dmg' ] = spellsDmgPeight[i]
+    }
+}
+
+
+//Filter Nine
+
+if (lvlPnine != undefined) {
+
+    var labelPnine = lvlPnine[0]
+
+    ficha['labelPnine'] = labelPnine
+
+    var nPnineSpells = spellsNamePnine.length;
+
+    for (i = 0; i < nPnineSpells; i++){
+    ficha[labelPnine + 'Spell' + i] = spellsNamePnine[i]
+    }
+    for (i = 0; i < nPnineSpells; i++){
+    ficha[labelPnine + 'Spell' + i + 'Time' ] = spellsTimePnine[i]
+    }
+    for (i = 0; i < nPnineSpells; i++){
+    ficha[labelPnine + 'Spell' + i + 'Range' ] = spellsRangePnine[i]
+    }
+    for (i = 0; i < nPnineSpells; i++){
+    ficha[labelPnine + 'Spell' + i + 'Hit' ] = spellsHitPnine[i]
+    }
+    for (i = 0; i < nPnineSpells; i++){
+    ficha[labelPnine + 'Spell' + i + 'Dmg' ] = spellsDmgPnine[i]
+    }
+}
+
+//Filter Ten
+
+if (lvlPten != undefined) {
+
+    var labelPten = lvlPten[0]
+
+    ficha['labelPten'] = labelPten
+
+    var nPtenSpells = spellsNamePten.length;
+
+    for (i = 0; i < nPtenSpells; i++){
+    ficha[labelPten + 'Spell' + i] = spellsNamePten[i]
+    }
+    for (i = 0; i < nPtenSpells; i++){
+    ficha[labelPten + 'Spell' + i + 'Time' ] = spellsTimePten[i]
+    }
+    for (i = 0; i < nPtenSpells; i++){
+    ficha[labelPten + 'Spell' + i + 'Range' ] = spellsRangePten[i]
+    }
+    for (i = 0; i < nPtenSpells; i++){
+    ficha[labelPten + 'Spell' + i + 'Hit' ] = spellsHitPten[i]
+    }
+    for (i = 0; i < nPtenSpells; i++){
+    ficha[labelPten + 'Spell' + i + 'Dmg' ] = spellsDmgPten[i]
+    }
+}
+
+
+//console.log(ficha)
+console.log((JSON.stringify(ficha)))
+
+
+
+
+
+
+
 
 })();
