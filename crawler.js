@@ -1,6 +1,9 @@
 //version: 0.0.1
 
+
+
 const puppeteer = require('puppeteer');
+var url = "https://www.dndbeyond.com/characters/34924358/QlCriX";
 
 (async () => {
   const browser = await puppeteer.launch({ headless: true });
@@ -8,7 +11,7 @@ const puppeteer = require('puppeteer');
 
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 800 })
-  await page.goto('https://www.dndbeyond.com/characters/34924358/QlCriX');
+  await page.goto(url);
   await console.log('User navigated to site');
   await page.waitForTimeout(5000)
 
