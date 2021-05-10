@@ -3,10 +3,11 @@
 
 
 const puppeteer = require('puppeteer');
-var url = "https://www.dndbeyond.com/characters/34924358/QlCriX";
+var url = "https://www.dndbeyond.com/profile/MwestM/characters/34924358";
+var headless = false;
 
 (async () => {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: headless });
   await console.log('Launching test');
 
   const page = await browser.newPage();
@@ -22,113 +23,98 @@ const charName = await page.evaluate(() =>
 	 (element, index) => element.textContent,
    )
  )
- const charRace = await page.evaluate(() =>
+const charRace = await page.evaluate(() =>
    Array.from(
  	document.querySelectorAll('.ddbc-character-summary__race'),
  	(element, index) => element.textContent,
    )
  )
-
- const charClass = await page.evaluate(() =>
+const charClass = await page.evaluate(() =>
    Array.from(
  	document.querySelectorAll('.ddbc-character-summary__classes'),
  	(element, index) => element.textContent,
    )
  )
-
- const charStats = await page.evaluate(() =>
+const charStats = await page.evaluate(() =>
    Array.from(
  	document.querySelectorAll('.ddbc-ability-summary__primary'),
  	(element, index) => element.textContent,
    )
  )
- const charStatsMod = await page.evaluate(() =>
+const charStatsMod = await page.evaluate(() =>
    Array.from(
    document.querySelectorAll('.ddbc-ability-summary__secondary  > span'),
    (element, index) => element.textContent,
    )
  )
- const charBonus = await page.evaluate(() =>
+const charBonus = await page.evaluate(() =>
    Array.from(
    document.querySelectorAll('.ct-proficiency-bonus-box__value  > span'),
    (element, index) => element.textContent,
    )
  )
-
- const charSpeed = await page.evaluate(() =>
+const charSpeed = await page.evaluate(() =>
    Array.from(
    document.querySelectorAll('.ct-speed-box__box-value > span'),
    (element, index) => element.textContent,
    )
  )
-
- const charHp = await page.evaluate(() =>
+const charHp = await page.evaluate(() =>
    Array.from(
     document.querySelectorAll('.ct-health-summary__hp-number'),
     (element, index) => element.textContent,
    )
  )
-
 const charSav = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ddbc-saving-throws-summary__ability-modifier'),
    (element, index) => element.textContent,
   )
 )
-
 const savAdvdirty = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ct-dice-adjustment-summary > span'),
    (element, index) => element.textContent,
   )
 )
-
 const savAdv = savAdvdirty.filter(element => element != '' )
-
 const charSen = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ct-senses__callout-value'),
    (element, index) => element.innerHTML,
   )
 )
-
 const charSenExtra = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ct-senses__summary'),
    (element, index) => element.textContent,
   )
 )
-
 const charProf = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ct-proficiency-groups__group-items'),
    (element, index) => element.textContent,
   )
 )
-
 const charSkill = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ct-skills__col--modifier'),
    (element, index) => element.textContent,
   )
 )
-
 const charSkillcleaner = charSkill.shift();
-
 const charInit = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ct-initiative-box'),
    (element, index) => element.textContent,
   )
 )
-
 const charAc = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ddbc-armor-class-box__value'),
    (element, index) => element.textContent,
   )
 )
-
 const charDefdirty = await page.evaluate(() =>
     Array.from(
     document.querySelectorAll('.ct-defenses-summary__group-items'),
@@ -150,6 +136,9 @@ var defImmunity = defImmunityS.join(', ')
 } else {var defImmunity = 'None'}
 
 const charDef = [defResistence, defImmunity]
+
+await page.waitForSelector('.ct-actions > .ddbc-tab-options > .ddbc-tab-options__nav > .ddbc-tab-options__header:nth-child(1) > .ddbc-tab-options__header-heading')
+await page.click('.ct-actions > .ddbc-tab-options > .ddbc-tab-options__nav > .ddbc-tab-options__header:nth-child(3) > .ddbc-tab-options__header-heading')
 
 const attackName = await page.evaluate(() =>
   Array.from(
@@ -188,9 +177,6 @@ const attackType = await page.evaluate(() =>
   )
 )
 
- await page.waitForSelector('.ct-actions > .ddbc-tab-options > .ddbc-tab-options__nav > .ddbc-tab-options__header:nth-child(3) > .ddbc-tab-options__header-heading')
-  await page.click('.ct-actions > .ddbc-tab-options > .ddbc-tab-options__nav > .ddbc-tab-options__header:nth-child(3) > .ddbc-tab-options__header-heading')
-
   const actionTitle = await page.evaluate(() =>
     Array.from(
      document.querySelectorAll('.ct-feature-snippet__heading'),
@@ -204,50 +190,47 @@ const attackType = await page.evaluate(() =>
     )
   )
 
+await page.click('.ct-actions > .ddbc-tab-options > .ddbc-tab-options__nav > .ddbc-tab-options__header:nth-child(4) > .ddbc-tab-options__header-heading')
 
-  await page.click('.ct-actions > .ddbc-tab-options > .ddbc-tab-options__nav > .ddbc-tab-options__header:nth-child(4) > .ddbc-tab-options__header-heading')
-
-  const bonusActionTitle = await page.evaluate(() =>
+const bonusActionTitle = await page.evaluate(() =>
     Array.from(
      document.querySelectorAll('.ct-feature-snippet__heading'),
      (element, index) => element.textContent,
     )
   )
-  const bonusActionDescription = await page.evaluate(() =>
+const bonusActionDescription = await page.evaluate(() =>
     Array.from(
      document.querySelectorAll('.ct-feature-snippet__content'),
      (element, index) => element.textContent,
     )
   )
-
-  const bonusActionSpellsTitle = await page.evaluate(() =>
+const bonusActionSpellsTitle = await page.evaluate(() =>
     Array.from(
      document.querySelectorAll('.ct-actions-list__spells-heading'),
      (element, index) => element.textContent,
     )
   )
-  const bonusActionSpellsDescription = await page.evaluate(() =>
+const bonusActionSpellsDescription = await page.evaluate(() =>
     Array.from(
      document.querySelectorAll('.ct-actions-list__spells-list'),
      (element, index) => element.textContent,
     )
   )
 
- await page.click('.ct-actions > .ddbc-tab-options > .ddbc-tab-options__nav > .ddbc-tab-options__header:nth-child(5) > .ddbc-tab-options__header-heading')
+await page.click('.ct-actions > .ddbc-tab-options > .ddbc-tab-options__nav > .ddbc-tab-options__header:nth-child(5) > .ddbc-tab-options__header-heading')
 
- const reactionTitle = await page.evaluate(() =>
+const reactionTitle = await page.evaluate(() =>
    Array.from(
     document.querySelectorAll('.ct-feature-snippet__heading'),
     (element, index) => element.textContent,
    )
  )
- const reactionDescription = await page.evaluate(() =>
+const reactionDescription = await page.evaluate(() =>
    Array.from(
     document.querySelectorAll('.ct-feature-snippet__content'),
     (element, index) => element.textContent,
    )
  )
-
  // Spell Section --------------------------
 var castInfo = undefined
 if (await page.$('.ct-primary-box > .ddbc-tab-list > .ddbc-tab-list__nav > .ct-primary-box__tab--spells > .ddbc-tab-list__nav-item-label') !== null)
@@ -975,62 +958,67 @@ console.log('Features Description', (JSON.stringify(featDescription)))
 
 
 var ficha = {
-         name: charName[0],
-         race: charRace[0],
-         clas: charClass[0],
+         sname: charName[0],
+         srace: charRace[0],
+         sclas: charClass[0],
 
-         strAtr: charStats[0],
-         dexAtr: charStats[1],
-         conAtr: charStats[2],
-         intAtr: charStats[3],
-         wisAtr: charStats[4],
-         chaAtr: charStats[5],
+         sstrAtr: charStats[0],
+         sdexAtr: charStats[1],
+         sconAtr: charStats[2],
+         sintAtr: charStats[3],
+         swisAtr: charStats[4],
+         schaAtr: charStats[5],
 
-         strhMod: charStatsMod[0],
-         dexMod: charStatsMod[1],
-         conMod: charStatsMod[2],
-         intMod: charStatsMod[3],
-         wisMod: charStatsMod[4],
-         chaMod: charStatsMod[5],
+         sstrhMod: charStatsMod[0],
+         sdexMod: charStatsMod[1],
+         sconMod: charStatsMod[2],
+         sintMod: charStatsMod[3],
+         swisMod: charStatsMod[4],
+         schaMod: charStatsMod[5],
 
-         proficiency: charBonus,
-         speed: charSpeed,
-         currentHp: charHp[0],
-         maxHp: charHp[1],
+         sproficiency: charBonus[0],
+         sspeed: charSpeed[0],
+         scurrentHp: charHp[0],
+         smaxHp: charHp[1],
 
-         strSav: charSav[0],
-         dexSav: charSav[1],
-         conSav: charSav[2],
-         intSav: charSav[3],
-         wisSav: charSav[4],
-         chaSav: charSav[5],
+         sstrSav: charSav[0],
+         sdexSav: charSav[1],
+         sconSav: charSav[2],
+         sintSav: charSav[3],
+         swisSav: charSav[4],
+         schaSav: charSav[5],
 
-         passPerc: charSen[0],
-         passInve: charSen[1],
-         passInsi: charSen[2],
-         extraSenses: charSenExtra[0],
+         spassPerc: charSen[0],
+         spassInve: charSen[1],
+         spassInsi: charSen[2],
+         sextraSenses: charSenExtra[0],
 
-         acrobatics: charSkill[0],
-         handling: charSkill[1],
-         arcana: charSkill[2],
-         athletics: charSkill[3],
-         deception: charSkill[4],
-         history: charSkill[5],
-         insight: charSkill[6],
-         intimidation: charSkill[7],
-         investigation: charSkill[8],
-         medicine: charSkill[9],
-         nature: charSkill[10],
-         perception: charSkill[11],
-         performance: charSkill[12],
-         persuasion: charSkill[13],
-         religion: charSkill[14],
-         hand: charSkill[15],
-         stealh: charSkill[16],
-         survival: charSkill[17],
+         sarmorProf: charProf[0],
+         sweaponProf: charProf[1],
+         stoolProf: charProf[2],
+         slanguageProf: charProf[3],
 
-         initiative: charInit[0],
-         armorClass: charAc[0],
+         sacrobatics: charSkill[0],
+         shandling: charSkill[1],
+         sarcana: charSkill[2],
+         sathletics: charSkill[3],
+         sdeception: charSkill[4],
+         shistory: charSkill[5],
+         sinsight: charSkill[6],
+         sintimidation: charSkill[7],
+         sinvestigation: charSkill[8],
+         smedicine: charSkill[9],
+         snature: charSkill[10],
+         sperception: charSkill[11],
+         sperformance: charSkill[12],
+         spersuasion: charSkill[13],
+         sreligion: charSkill[14],
+         shand: charSkill[15],
+         sstealh: charSkill[16],
+         ssurvival: charSkill[17],
+
+         sinitiative: charInit[0],
+         sarmorClass: charAc[0],
 
  }
 
@@ -1058,7 +1046,6 @@ ficha['attackType' + i] = attackType[i]
 }
 
 //Actions
-
 var numberOfActions = actionTitle.length;
 
 for (i = 0; i < numberOfActions; i++){
@@ -1090,13 +1077,13 @@ ficha['bActionDescriptionSpell' + i] = bonusActionSpellsDescription[i]
 
 //Reactions
 
-var numberOfreActions = reactionTitle.length;
+var numberOfreactions = reactionTitle.length;
 
-for (i = 0; i < numberOfreActions; i++){
-ficha['action' + i] = reactionTitle[i]
+for (i = 0; i < numberOfreactions; i++){
+ficha['reaction' + i] = reactionTitle[i]
 }
-for (i = 0; i < numberOfreActions; i++){
-ficha['actionDescription' + i] = reactionDescription[i]
+for (i = 0; i < numberOfreactions; i++){
+ficha['reactionDescription' + i] = reactionDescription[i]
 }
 
 //Inventory
@@ -1412,6 +1399,7 @@ if (lvlPten != undefined) {
 
 //console.log(ficha)
 console.log((JSON.stringify(ficha)))
+//console.log(charProf)
 
 
 
