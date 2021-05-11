@@ -3,7 +3,10 @@
 
 
 const puppeteer = require('puppeteer');
-var url = "https://www.dndbeyond.com/profile/MwestM/characters/34924358";
+//Baroness Lia
+var url = "https://www.dndbeyond.com/characters/33025149/4LXump";
+//Hunk
+//var url = "https://www.dndbeyond.com/characters/34924358/3x8k1j";
 var headless = false;
 
 (async () => {
@@ -958,73 +961,74 @@ console.log('Features Description', (JSON.stringify(featDescription)))
 
 
 var ficha = {
-         sname: charName[0],
-         srace: charRace[0],
-         sclas: charClass[0],
+         name: charName[0],
+         race: charRace[0],
+         class: charClass[0],
 
-         sstrAtr: charStats[0],
-         sdexAtr: charStats[1],
-         sconAtr: charStats[2],
-         sintAtr: charStats[3],
-         swisAtr: charStats[4],
-         schaAtr: charStats[5],
+         strAtr: charStats[0],
+         dexAtr: charStats[1],
+         conAtr: charStats[2],
+         intAtr: charStats[3],
+         wisAtr: charStats[4],
+         chaAtr: charStats[5],
 
-         sstrhMod: charStatsMod[0],
-         sdexMod: charStatsMod[1],
-         sconMod: charStatsMod[2],
-         sintMod: charStatsMod[3],
-         swisMod: charStatsMod[4],
-         schaMod: charStatsMod[5],
+         strhMod: charStatsMod[0],
+         dexMod: charStatsMod[1],
+         conMod: charStatsMod[2],
+         intMod: charStatsMod[3],
+         wisMod: charStatsMod[4],
+         chaMod: charStatsMod[5],
 
-         sproficiency: charBonus[0],
-         sspeed: charSpeed[0],
-         scurrentHp: charHp[0],
-         smaxHp: charHp[1],
+         proficiency: charBonus[0],
+         speed: charSpeed[0],
+         currentHp: charHp[0],
+         maxHp: charHp[1],
 
-         sstrSav: charSav[0],
-         sdexSav: charSav[1],
-         sconSav: charSav[2],
-         sintSav: charSav[3],
-         swisSav: charSav[4],
-         schaSav: charSav[5],
+         strSav: charSav[0],
+         dexSav: charSav[1],
+         conSav: charSav[2],
+         intSav: charSav[3],
+         wisSav: charSav[4],
+         chaSav: charSav[5],
 
-         spassPerc: charSen[0],
-         spassInve: charSen[1],
-         spassInsi: charSen[2],
-         sextraSenses: charSenExtra[0],
+         passPerc: charSen[0],
+         passInve: charSen[1],
+         passInsi: charSen[2],
+         extraSenses: charSenExtra[0],
 
-         sarmorProf: charProf[0],
-         sweaponProf: charProf[1],
-         stoolProf: charProf[2],
-         slanguageProf: charProf[3],
+         armorProf: charProf[0],
+         weaponProf: charProf[1],
+         toolProf: charProf[2],
+         languageProf: charProf[3],
 
-         sacrobatics: charSkill[0],
-         shandling: charSkill[1],
-         sarcana: charSkill[2],
-         sathletics: charSkill[3],
-         sdeception: charSkill[4],
-         shistory: charSkill[5],
-         sinsight: charSkill[6],
-         sintimidation: charSkill[7],
-         sinvestigation: charSkill[8],
-         smedicine: charSkill[9],
-         snature: charSkill[10],
-         sperception: charSkill[11],
-         sperformance: charSkill[12],
-         spersuasion: charSkill[13],
-         sreligion: charSkill[14],
-         shand: charSkill[15],
-         sstealh: charSkill[16],
-         ssurvival: charSkill[17],
+         acrobatics: charSkill[0],
+         handling: charSkill[1],
+         arcana: charSkill[2],
+         athletics: charSkill[3],
+         deception: charSkill[4],
+         history: charSkill[5],
+         insight: charSkill[6],
+         intimidation: charSkill[7],
+         investigation: charSkill[8],
+         medicine: charSkill[9],
+         nature: charSkill[10],
+         perception: charSkill[11],
+         performance: charSkill[12],
+         persuasion: charSkill[13],
+         religion: charSkill[14],
+         hand: charSkill[15],
+         stealth: charSkill[16],
+         survival: charSkill[17],
 
-         sinitiative: charInit[0],
-         sarmorClass: charAc[0],
+         initiative: charInit[0],
+         armorClass: charAc[0],
 
  }
 
  // Attacks
 var numberOfAttacks = attackName.length;
 var i;
+ficha.numberOfAttacks = numberOfAttacks
 
 for (i = 0; i < numberOfAttacks; i++){
 ficha['attack' + i] = attackName[i]
@@ -1047,6 +1051,7 @@ ficha['attackType' + i] = attackType[i]
 
 //Actions
 var numberOfActions = actionTitle.length;
+ficha.numberOfActions = numberOfActions
 
 for (i = 0; i < numberOfActions; i++){
 ficha['action' + i] = actionTitle[i]
@@ -1058,6 +1063,7 @@ ficha['actionDescription' + i] = actionDescription[i]
 //Bonus Action
 
 var numberOfBonusActions = bonusActionTitle.length;
+ficha.numberOfBonusActions = numberOfBonusActions
 
 for (i = 0; i < numberOfBonusActions; i++){
 ficha['bAction' + i] = bonusActionTitle[i]
@@ -1076,8 +1082,8 @@ ficha['bActionDescriptionSpell' + i] = bonusActionSpellsDescription[i]
 }
 
 //Reactions
-
 var numberOfreactions = reactionTitle.length;
+ficha.numberOfreactions = numberOfreactions
 
 for (i = 0; i < numberOfreactions; i++){
 ficha['reaction' + i] = reactionTitle[i]
@@ -1087,8 +1093,8 @@ ficha['reactionDescription' + i] = reactionDescription[i]
 }
 
 //Inventory
-
 var numberOfItems = invName.length;
+ficha.numberOfItems = numberOfItems
 
 for (i = 0; i < numberOfItems; i++){
 ficha['item' + i] = invName[i]
@@ -1104,8 +1110,8 @@ ficha['itemCost' + i] = invCost[i]
 }
 
 //features
-
 var numberOfFeats = featTitle.length;
+ficha.numberOfFeats = numberOfFeats
 
 for (i = 0; i < numberOfFeats; i++){
 ficha['Feature' + i] = featTitle[i]
