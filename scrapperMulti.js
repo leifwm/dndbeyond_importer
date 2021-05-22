@@ -7,11 +7,11 @@ console.log(some);
 
 (function myFunction (){
 var headlessState = false
-var urls = ["https://www.dndbeyond.com/characters/33025149/4LXump",
-            "https://www.dndbeyond.com/characters/34924358/3x8k1j",
-            "https://www.dndbeyond.com/characters/33009908/buDEEQ",
-            "https://www.dndbeyond.com/characters/32797686/gRTOeT",
-            "https://www.dndbeyond.com/characters/33420875/uie2e2"];
+var urls = ["https://www.dndbeyond.com/characters/EXAMPLE1",
+            "https://www.dndbeyond.com/characters/EXAMPLE2",
+            "https://www.dndbeyond.com/characters/EXAMPLE3",
+            "https://www.dndbeyond.com/characters/EXAMPLE4",
+            "https://www.dndbeyond.com/characters/EXAMPLE5"];
 var i;
 
 for (i in urls) {
