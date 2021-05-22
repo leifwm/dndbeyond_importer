@@ -1,4 +1,4 @@
-
+//ver 0.5.0
 const puppeteer = require('puppeteer');
 
 function myLogger(some) {
