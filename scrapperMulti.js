@@ -1,22 +1,36 @@
-//version: 0.0.1
-
-
 
 const puppeteer = require('puppeteer');
-//Baroness Lia
-var url = "https://www.dndbeyond.com/characters/33025149/4LXump";
-//Hunk
-//var url = "https://www.dndbeyond.com/characters/34924358/3x8k1j";
-var headless = false;
 
-(async () => {
+function myLogger(some) {
+console.log(some);
+}
+
+(function myFunction (){
+var headlessState = false
+var urls = ["https://www.dndbeyond.com/characters/33025149/4LXump",
+            "https://www.dndbeyond.com/characters/34924358/3x8k1j",
+            "https://www.dndbeyond.com/characters/33009908/buDEEQ",
+            "https://www.dndbeyond.com/characters/32797686/gRTOeT",
+            "https://www.dndbeyond.com/characters/33420875/uie2e2"];
+var i;
+
+for (i in urls) {
+    myScrapper(headlessState, urls[i]).then(
+            function(value) {myLogger(value);},
+            function(error) {myLogger(error);}
+    );
+}
+
+})();
+
+async function myScrapper(headless, url) {
   const browser = await puppeteer.launch({ headless: headless });
-  await console.log('Launching test');
+  //await console.log('Launching test');
 
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 800 })
   await page.goto(url);
-  await console.log('User navigated to site');
+  //await console.log('User navigated to site');
   await page.waitForTimeout(5000)
 
 
@@ -852,7 +866,7 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
 
  const invName = await page.evaluate(() =>
    Array.from(
-    document.querySelectorAll('.ddbc-item-name'),
+    document.querySelectorAll('.ct-inventory-item__heading > .ddbc-item-name'),
     (element, index) => element.textContent,
    )
  )
@@ -874,12 +888,16 @@ var linkNavSelector = linkNav[0].match(/(Concentration|Ritual)/g);
     (element, index) => element.textContent,
    )
  )
-
-/*console.log(invName)
+/*
+console.log(invName.length)
+console.log(invName)
+console.log(invWeight.length)
 console.log(invWeight)
+console.log(invQuantity.length)
 console.log(invQuantity)
-console.log(invCost)*/
-
+console.log(invCost.length)
+console.log(invCost)
+*/
 // Inventory  End ------------------------
 
 await page.click('.ct-primary-box > .ddbc-tab-list > .ddbc-tab-list__nav > .ct-primary-box__tab--features > .ddbc-tab-list__nav-item-label')
@@ -898,7 +916,7 @@ const featDescription = await page.evaluate(() =>
 )
 
 browser.close();
-console.log('Browser closed');
+//console.log('Browser closed');
 
 /*console.log(featTitle)
 console.log(featDescription)
@@ -1027,100 +1045,55 @@ var ficha = {
 
  // Attacks
 var numberOfAttacks = attackName.length;
-var i;
-ficha.numberOfAttacks = numberOfAttacks
-
-for (i = 0; i < numberOfAttacks; i++){
-ficha['attack' + i] = attackName[i]
-}
-for (i = 0; i < numberOfAttacks; i++){
-ficha['attackRange' + i] = attackRange[i]
-}
-for (i = 0; i < numberOfAttacks; i++){
-ficha['attackBonus' + i] = attackBonus[i]
-}
-for (i = 0; i < numberOfAttacks; i++){
-ficha['attackDamage' + i] = attackDamage[i]
-}
-for (i = 0; i < numberOfAttacks; i++){
-ficha['attackNotes' + i] = attackNotes[i]
-}
-for (i = 0; i < numberOfAttacks; i++){
-ficha['attackType' + i] = attackType[i]
-}
+ficha.numberOfAttacks = numberOfAttacks,
+ficha.attackName = attackName,
+ficha.attackRange = attackRange,
+ficha.attackBonus = attackBonus,
+ficha.attackDamage = attackDamage,
+ficha.attackNotes = attackNotes,
+ficha.attackType = attackType
 
 //Actions
 var numberOfActions = actionTitle.length;
-ficha.numberOfActions = numberOfActions
-
-for (i = 0; i < numberOfActions; i++){
-ficha['action' + i] = actionTitle[i]
-}
-for (i = 0; i < numberOfActions; i++){
-ficha['actionDescription' + i] = actionDescription[i]
-}
+ficha.numberOfActions = numberOfActions,
+ficha.action = actionTitle,
+ficha.actionDescription = actionDescription
 
 //Bonus Action
 
 var numberOfBonusActions = bonusActionTitle.length;
-ficha.numberOfBonusActions = numberOfBonusActions
+ficha.numberOfBonusActions = numberOfBonusActions,
+ficha.bonusActionTitle = bonusActionTitle,
+ficha.bonusActionDescription = bonusActionDescription
 
-for (i = 0; i < numberOfBonusActions; i++){
-ficha['bAction' + i] = bonusActionTitle[i]
-}
-for (i = 0; i < numberOfBonusActions; i++){
-ficha['bActionDescription' + i] = bonusActionDescription[i]
-}
+var numberOfBonusActionsSpells = bonusActionSpellsTitle.length;
+ficha.numberOfBonusActionsSpells = numberOfBonusActionsSpells,
+ficha.bonusActionSpellsTitle = bonusActionSpellsTitle,
+ficha.bonusActionSpellsDescription = bonusActionSpellsDescription
 
-var numberOfBonusActionsS = bonusActionSpellsTitle.length;
-
-for (i = 0; i < numberOfBonusActionsS; i++){
-ficha['bActionSpell' + i] = bonusActionSpellsTitle[i]
-}
-for (i = 0; i < numberOfBonusActionsS; i++){
-ficha['bActionDescriptionSpell' + i] = bonusActionSpellsDescription[i]
-}
 
 //Reactions
 var numberOfreactions = reactionTitle.length;
-ficha.numberOfreactions = numberOfreactions
-
-for (i = 0; i < numberOfreactions; i++){
-ficha['reaction' + i] = reactionTitle[i]
-}
-for (i = 0; i < numberOfreactions; i++){
-ficha['reactionDescription' + i] = reactionDescription[i]
-}
+ficha.reactionTitle = reactionTitle,
+ficha.reactionDescription = reactionDescription
 
 //Inventory
 var numberOfItems = invName.length;
-ficha.numberOfItems = numberOfItems
-
-for (i = 0; i < numberOfItems; i++){
-ficha['item' + i] = invName[i]
-}
-for (i = 0; i < numberOfItems; i++){
-ficha['itemWeight' + i] = invWeight[i]
-}
-for (i = 0; i < numberOfItems; i++){
-ficha['itemQuantity' + i] = invQuantity[i]
-}
-for (i = 0; i < numberOfItems; i++){
-ficha['itemCost' + i] = invCost[i]
-}
+ficha.numberOfItems = numberOfItems,
+ficha.invName = invName,
+ficha.invWeight = invWeight,
+ficha.invQuantity = invQuantity,
+ficha.invCost = invCost
 
 //features
 var numberOfFeats = featTitle.length;
-ficha.numberOfFeats = numberOfFeats
+ficha.numberOfFeats = numberOfFeats,
+ficha.featTitle = featTitle,
+ficha.featDescription = featDescription
 
-for (i = 0; i < numberOfFeats; i++){
-ficha['Feature' + i] = featTitle[i]
-}
-for (i = 0; i < numberOfFeats; i++){
-ficha['FeatureDescription' + i] = featDescription[i]
-}
 
 //SpelLs
+var i;
 
 if (castInfo != null)
 {
@@ -1138,23 +1111,12 @@ if (lvlPone != undefined) {
 
     ficha['labelPone'] = labelPone
 
-    var nPoneSpells = spellsNamePone.length;
+    ficha.spellsNamePone = spellsNamePone
+    ficha.spellsTimePone = spellsTimePone
+    ficha.spellsRangePone = spellsRangePone
+    ficha.spellsHitPone = spellsHitPone
+    ficha.spellsDmgPone = spellsDmgPone
 
-    for (i = 0; i < nPoneSpells; i++){
-    ficha[labelPone + 'Spell' + i] = spellsNamePone[i]
-    }
-    for (i = 0; i < nPoneSpells; i++){
-    ficha[labelPone + 'Spell' + i + 'Time' ] = spellsTimePone[i]
-    }
-    for (i = 0; i < nPoneSpells; i++){
-    ficha[labelPone + 'Spell' + i + 'Range' ] = spellsRangePone[i]
-    }
-    for (i = 0; i < nPoneSpells; i++){
-    ficha[labelPone + 'Spell' + i + 'Hit' ] = spellsHitPone[i]
-    }
-    for (i = 0; i < nPoneSpells; i++){
-    ficha[labelPone + 'Spell' + i + 'Dmg' ] = spellsDmgPone[i]
-    }
 }
 
 //Filter Two
@@ -1165,23 +1127,11 @@ if (lvlPtwo != undefined) {
 
     ficha['labelPtwo'] = labelPtwo
 
-    var nPtwoSpells = spellsNamePtwo.length;
-
-    for (i = 0; i < nPtwoSpells; i++){
-    ficha[labelPtwo + 'Spell' + i] = spellsNamePtwo[i]
-    }
-    for (i = 0; i < nPtwoSpells; i++){
-    ficha[labelPtwo + 'Spell' + i + 'Time' ] = spellsTimePtwo[i]
-    }
-    for (i = 0; i < nPtwoSpells; i++){
-    ficha[labelPtwo + 'Spell' + i + 'Range' ] = spellsRangePtwo[i]
-    }
-    for (i = 0; i < nPtwoSpells; i++){
-    ficha[labelPtwo + 'Spell' + i + 'Hit' ] = spellsHitPtwo[i]
-    }
-    for (i = 0; i < nPtwoSpells; i++){
-    ficha[labelPtwo + 'Spell' + i + 'Dmg' ] = spellsDmgPtwo[i]
-    }
+    ficha.spellsNamePtwo = spellsNamePtwo
+    ficha.spellsTimePtwo = spellsTimePtwo
+    ficha.spellsRangePtwo = spellsRangePtwo
+    ficha.spellsHitPtwo = spellsHitPtwo
+    ficha.spellsDmgPtwo = spellsDmgPtwo
 }
 
 //Filter Three
@@ -1192,23 +1142,11 @@ if (lvlPthree != undefined) {
 
     ficha['labelPthree'] = labelPthree
 
-    var nPthreeSpells = spellsNamePthree.length;
-
-    for (i = 0; i < nPthreeSpells; i++){
-    ficha[labelPthree + 'Spell' + i] = spellsNamePthree[i]
-    }
-    for (i = 0; i < nPthreeSpells; i++){
-    ficha[labelPthree + 'Spell' + i + 'Time' ] = spellsTimePthree[i]
-    }
-    for (i = 0; i < nPthreeSpells; i++){
-    ficha[labelPthree + 'Spell' + i + 'Range' ] = spellsRangePthree[i]
-    }
-    for (i = 0; i < nPthreeSpells; i++){
-    ficha[labelPthree + 'Spell' + i + 'Hit' ] = spellsHitPthree[i]
-    }
-    for (i = 0; i < nPthreeSpells; i++){
-    ficha[labelPthree + 'Spell' + i + 'Dmg' ] = spellsDmgPthree[i]
-    }
+    ficha.spellsNamePthree = spellsNamePthree
+    ficha.spellsTimePthree = spellsTimePthree
+    ficha.spellsRangePthree = spellsRangePthree
+    ficha.spellsHitPthree = spellsHitPthree
+    ficha.spellsDmgPthree = spellsDmgPthree
 }
 
 //Filter Four
@@ -1219,23 +1157,11 @@ if (lvlPfour != undefined) {
 
     ficha['labelPfour'] = labelPfour
 
-    var nPfourSpells = spellsNamePfour.length;
-
-    for (i = 0; i < nPfourSpells; i++){
-    ficha[labelPfour + 'Spell' + i] = spellsNamePfour[i]
-    }
-    for (i = 0; i < nPfourSpells; i++){
-    ficha[labelPfour + 'Spell' + i + 'Time' ] = spellsTimePfour[i]
-    }
-    for (i = 0; i < nPfourSpells; i++){
-    ficha[labelPfour + 'Spell' + i + 'Range' ] = spellsRangePfour[i]
-    }
-    for (i = 0; i < nPfourSpells; i++){
-    ficha[labelPfour + 'Spell' + i + 'Hit' ] = spellsHitPfour[i]
-    }
-    for (i = 0; i < nPfourSpells; i++){
-    ficha[labelPfour + 'Spell' + i + 'Dmg' ] = spellsDmgPfour[i]
-    }
+    ficha.spellsNamePfour = spellsNamePfour
+    ficha.spellsTimePfour = spellsTimePfour
+    ficha.spellsRangePfour = spellsRangePfour
+    ficha.spellsHitPfour = spellsHitPfour
+    ficha.spellsDmgPfour = spellsDmgPfour
 }
 
 //Filter Five
@@ -1246,23 +1172,11 @@ if (lvlPfive != undefined) {
 
     ficha['labelPfive'] = labelPfive
 
-    var nPfiveSpells = spellsNamePfive.length;
-
-    for (i = 0; i < nPfiveSpells; i++){
-    ficha[labelPfive + 'Spell' + i] = spellsNamePfive[i]
-    }
-    for (i = 0; i < nPfiveSpells; i++){
-    ficha[labelPfive + 'Spell' + i + 'Time' ] = spellsTimePfive[i]
-    }
-    for (i = 0; i < nPfiveSpells; i++){
-    ficha[labelPfive + 'Spell' + i + 'Range' ] = spellsRangePfive[i]
-    }
-    for (i = 0; i < nPfiveSpells; i++){
-    ficha[labelPfive + 'Spell' + i + 'Hit' ] = spellsHitPfive[i]
-    }
-    for (i = 0; i < nPfiveSpells; i++){
-    ficha[labelPfive + 'Spell' + i + 'Dmg' ] = spellsDmgPfive[i]
-    }
+    ficha.spellsNamePfive = spellsNamePfive
+    ficha.spellsTimePfive = spellsTimePfive
+    ficha.spellsRangePfive = spellsRangePfive
+    ficha.spellsHitPfive = spellsHitPfive
+    ficha.spellsDmgPfive = spellsDmgPfive
 }
 
 //Filter Six
@@ -1273,23 +1187,11 @@ if (lvlPsix != undefined) {
 
     ficha['labelPsix'] = labelPsix
 
-    var nPsixSpells = spellsNamePsix.length;
-
-    for (i = 0; i < nPsixSpells; i++){
-    ficha[labelPsix + 'Spell' + i] = spellsNamePsix[i]
-    }
-    for (i = 0; i < nPsixSpells; i++){
-    ficha[labelPsix + 'Spell' + i + 'Time' ] = spellsTimePsix[i]
-    }
-    for (i = 0; i < nPsixSpells; i++){
-    ficha[labelPsix + 'Spell' + i + 'Range' ] = spellsRangePsix[i]
-    }
-    for (i = 0; i < nPsixSpells; i++){
-    ficha[labelPsix + 'Spell' + i + 'Hit' ] = spellsHitPsix[i]
-    }
-    for (i = 0; i < nPsixSpells; i++){
-    ficha[labelPsix + 'Spell' + i + 'Dmg' ] = spellsDmgPsix[i]
-    }
+    ficha.spellsNamePsix = spellsNamePsix
+    ficha.spellsTimePsix = spellsTimePsix
+    ficha.spellsRangePsix = spellsRangePsix
+    ficha.spellsHitPsix = spellsHitPsix
+    ficha.spellsDmgPsix = spellsDmgPsix
 }
 
 
@@ -1301,23 +1203,11 @@ if (lvlPseven != undefined) {
 
     ficha['labelPseven'] = labelPseven
 
-    var nPsevenSpells = spellsNamePseven.length;
-
-    for (i = 0; i < nPsevenSpells; i++){
-    ficha[labelPseven + 'Spell' + i] = spellsNamePseven[i]
-    }
-    for (i = 0; i < nPsevenSpells; i++){
-    ficha[labelPseven + 'Spell' + i + 'Time' ] = spellsTimePseven[i]
-    }
-    for (i = 0; i < nPsevenSpells; i++){
-    ficha[labelPseven + 'Spell' + i + 'Range' ] = spellsRangePseven[i]
-    }
-    for (i = 0; i < nPsevenSpells; i++){
-    ficha[labelPseven + 'Spell' + i + 'Hit' ] = spellsHitPseven[i]
-    }
-    for (i = 0; i < nPsevenSpells; i++){
-    ficha[labelPseven + 'Spell' + i + 'Dmg' ] = spellsDmgPseven[i]
-    }
+    ficha.spellsNamePseven = spellsNamePseven
+    ficha.spellsTimePseven = spellsTimePseven
+    ficha.spellsRangePseven = spellsRangePseven
+    ficha.spellsHitPseven = spellsHitPseven
+    ficha.spellsDmgPseven = spellsDmgPseven
 }
 
 //Filter Eight
@@ -1328,25 +1218,12 @@ if (lvlPeight != undefined) {
 
     ficha['labelPeight'] = labelPeight
 
-    var nPeightSpells = spellsNamePeight.length;
-
-    for (i = 0; i < nPeightSpells; i++){
-    ficha[labelPeight + 'Spell' + i] = spellsNamePeight[i]
-    }
-    for (i = 0; i < nPeightSpells; i++){
-    ficha[labelPeight + 'Spell' + i + 'Time' ] = spellsTimePeight[i]
-    }
-    for (i = 0; i < nPeightSpells; i++){
-    ficha[labelPeight + 'Spell' + i + 'Range' ] = spellsRangePeight[i]
-    }
-    for (i = 0; i < nPeightSpells; i++){
-    ficha[labelPeight + 'Spell' + i + 'Hit' ] = spellsHitPeight[i]
-    }
-    for (i = 0; i < nPeightSpells; i++){
-    ficha[labelPeight + 'Spell' + i + 'Dmg' ] = spellsDmgPeight[i]
-    }
+    ficha.spellsNamePeight = spellsNamePeight
+    ficha.spellsTimePeight = spellsTimePeight
+    ficha.spellsRangePeight = spellsRangePeight
+    ficha.spellsHitPeight = spellsHitPeight
+    ficha.spellsDmgPeight = spellsDmgPeight
 }
-
 
 //Filter Nine
 
@@ -1356,23 +1233,11 @@ if (lvlPnine != undefined) {
 
     ficha['labelPnine'] = labelPnine
 
-    var nPnineSpells = spellsNamePnine.length;
-
-    for (i = 0; i < nPnineSpells; i++){
-    ficha[labelPnine + 'Spell' + i] = spellsNamePnine[i]
-    }
-    for (i = 0; i < nPnineSpells; i++){
-    ficha[labelPnine + 'Spell' + i + 'Time' ] = spellsTimePnine[i]
-    }
-    for (i = 0; i < nPnineSpells; i++){
-    ficha[labelPnine + 'Spell' + i + 'Range' ] = spellsRangePnine[i]
-    }
-    for (i = 0; i < nPnineSpells; i++){
-    ficha[labelPnine + 'Spell' + i + 'Hit' ] = spellsHitPnine[i]
-    }
-    for (i = 0; i < nPnineSpells; i++){
-    ficha[labelPnine + 'Spell' + i + 'Dmg' ] = spellsDmgPnine[i]
-    }
+    ficha.spellsNamePnine = spellsNamePnine
+    ficha.spellsTimePnine = spellsTimePnine
+    ficha.spellsRangePnine = spellsRangePnine
+    ficha.spellsHitPnine = spellsHitPnine
+    ficha.spellsDmgPnine = spellsDmgPnine
 }
 
 //Filter Ten
@@ -1383,29 +1248,19 @@ if (lvlPten != undefined) {
 
     ficha['labelPten'] = labelPten
 
-    var nPtenSpells = spellsNamePten.length;
-
-    for (i = 0; i < nPtenSpells; i++){
-    ficha[labelPten + 'Spell' + i] = spellsNamePten[i]
-    }
-    for (i = 0; i < nPtenSpells; i++){
-    ficha[labelPten + 'Spell' + i + 'Time' ] = spellsTimePten[i]
-    }
-    for (i = 0; i < nPtenSpells; i++){
-    ficha[labelPten + 'Spell' + i + 'Range' ] = spellsRangePten[i]
-    }
-    for (i = 0; i < nPtenSpells; i++){
-    ficha[labelPten + 'Spell' + i + 'Hit' ] = spellsHitPten[i]
-    }
-    for (i = 0; i < nPtenSpells; i++){
-    ficha[labelPten + 'Spell' + i + 'Dmg' ] = spellsDmgPten[i]
-    }
+    ficha.spellsNamePten = spellsNamePten
+    ficha.spellsTimePten = spellsTimePten
+    ficha.spellsRangePten = spellsRangePten
+    ficha.spellsHitPten = spellsHitPten
+    ficha.spellsDmgPten = spellsDmgPten
 }
 
 
 //console.log(ficha)
-console.log((JSON.stringify(ficha)))
-//console.log(charProf)
+//console.log((JSON.stringify(ficha)))
+var fichaJSON = (JSON.stringify(ficha));
+//console.log(fichaJSON);
+return fichaJSON;
 
 
 
@@ -1414,4 +1269,4 @@ console.log((JSON.stringify(ficha)))
 
 
 
-})();
+};
