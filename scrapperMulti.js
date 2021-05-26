@@ -25,6 +25,12 @@ to use terminal write:
 
 /Users/username/Desktop/scrapperMulti.js (this can be different for you, use your file dierctory this is an example)
 
+
+if you want to continually support the development of this script and the TTS mod
+that goes with it donate to lwm.funds@gmail.com on paypal
+
+enjoy!
+
 */
 
 //ignore this next lines!!!
