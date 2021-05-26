@@ -1,21 +1,62 @@
 //ver 0.5.0
+
+// Hi, hope this code helps your dnd game
+
+/*
+
+To make sure this code works you must install puppeteer.
+Puppeteerit is a Node.js module that helps navigate your browser trough code.
+(more on https://pptr.dev/)
+
+for this you must install the following:
+
+node.js and npm ---> "https://nodejs.org/en/download/. access and install it for you OS of choice
+this two will allow us to install puppeteer (obs: npm comes bundled with node.js)
+to install puppeteer open your Terminal and type:
+
+npm i puppeteer
+
+Note: When you install Puppeteer, it downloads a recent version of Chromium (~170MB Mac, ~282MB Linux, ~280MB Win).
+Chromium is basically Chrome but is guaranteed to work and can do headless navigation.
+
+When all this is done you can just run the code using a scripting tool or your terminal.
+
+to use terminal write:
+
+/Users/username/Desktop/scrapperMulti.js (this can be different for you, use your file dierctory this is an example)
+
+*/
+
+//ignore this next lines!!!
 const puppeteer = require('puppeteer');
 
 function myLogger(some) {
 console.log(some);
 }
 
-(function myFunction (){
-var headlessState = false
-var urls = ["https://www.dndbeyond.com/characters/EXAMPLE1",
-            "https://www.dndbeyond.com/characters/EXAMPLE2",
-            "https://www.dndbeyond.com/characters/EXAMPLE3",
-            "https://www.dndbeyond.com/characters/EXAMPLE4",
-            "https://www.dndbeyond.com/characters/EXAMPLE5"];
+(async function myFunction (){
+
+//Here is what matters to you, you can insert here the Url for you party's characters, use the sharable link and be sure to set the sheet as public.
+var headlessState = true //If you turn this in to false you can see the browser opening your sheets and copying stuff,
+//use the setting above to sse if everything is going all right, or change it because its fun to watch.
+//sometimes this script can activate ddb captcha, when this happens use false and solve the captcha when it opens then run the script again.
+
+
+//next insert the urls, you can put as many as you want, but remeber to use "" and ,
+var urls = ["https://www.dndbeyond.com/characters/Example",
+            "https://www.dndbeyond.com/characters/Example",
+            "https://www.dndbeyond.com/characters/Example",
+            "https://www.dndbeyond.com/characters/Example",
+            "https://www.dndbeyond.com/characters/Example"];
+
+
+
+//you shouldn't mess with the rest of the file with no scripting knowledge.
+
 var i;
 
 for (i in urls) {
-    myScrapper(headlessState, urls[i]).then(
+    await myScrapper(headlessState, urls[i]).then(
             function(value) {myLogger(value);},
             function(error) {myLogger(error);}
     );
@@ -181,6 +222,17 @@ const attackDamage = await page.evaluate(() =>
    (element, index) => element.textContent,
   )
 )
+// checking for versatile
+var a
+for (a in attackDamage) {
+    var v = attackDamage[a].includes("d", 4)
+    if (v == true) {
+        var l = attackDamage[a].length;
+        attackDamage[a] = attackDamage[a].slice(0, l/2);
+    }
+
+}
+
 const attackNotes = await page.evaluate(() =>
   Array.from(
    document.querySelectorAll('.ddbc-combat-attack__notes'),
