@@ -48,12 +48,19 @@ var headlessState = true //If you turn this in to false you can see the browser 
 //sometimes this script can activate ddb captcha, when this happens use false and solve the captcha when it opens then run the script again.
 
 
-//next insert the urls, you can put as many as you want, but remeber to use "" and ,
-var urls = ["https://www.dndbeyond.com/characters/Example",
-            "https://www.dndbeyond.com/characters/Example",
-            "https://www.dndbeyond.com/characters/Example",
-            "https://www.dndbeyond.com/characters/Example",
-            "https://www.dndbeyond.com/characters/Example"];
+//next insert the urls, you can put as many as you want, but remeber to use "" and , Use the URl showd when you click share in dndbeyond
+var urls = ["https://ddb.ac/characters/Example",
+            "https://ddb.ac/characters/Example",
+            "https://ddb.ac/characters/Example",
+            "https://ddb.ac/characters/Example",
+            "https://ddb.ac/characters/Example"];
+
+// this should be set to the path of your browser, USE CHROME, this example is the path in an Mac
+var pathToChrome = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+
+//this can be found by typing chrome://version/ in Chrome's url bar under Profile Path. It will show something like:
+// 	/Users/YOURUSERNAME/Library/Application Support/Google/Chrome/Default  just remove the default and copy/paste underneath between ""
+var pathUserDataDir = "/Users/YOURUSERNAME/Library/Application Support/Google/Chrome/"
 
 
 
@@ -62,7 +69,7 @@ var urls = ["https://www.dndbeyond.com/characters/Example",
 var i;
 
 for (i in urls) {
-    await myScrapper(headlessState, urls[i]).then(
+    await myScrapper(headlessState, urls[i], pathToChrome, pathUserDataDir).then(
             function(value) {myLogger(value);},
             function(error) {myLogger(error);}
     );
@@ -70,9 +77,16 @@ for (i in urls) {
 
 })();
 
-async function myScrapper(headless, url) {
-  const browser = await puppeteer.launch({ headless: headless });
-  //await console.log('Launching test');
+async function myScrapper(headless, url, pathToChrome, pathUserDataDir) {
+  //await console.log('Start');
+  const browser = await puppeteer.launch({
+      headless: headless,
+      executablePath: pathToChrome,
+      ignoreDefaultArgs: true,
+      args: ["--user-data-dir=" + pathUserDataDir, "--profile-directory=Default"]
+   });
+   //await console.log('Launching');
+
 
   const page = await browser.newPage();
   await page.setViewport({ width: 1280, height: 800 })
